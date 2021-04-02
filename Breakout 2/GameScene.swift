@@ -7,10 +7,11 @@
 var ball = SKShapeNode()
 var paddle = SKSpriteNode()
 var brick = SKSpriteNode()
+var loseZone = SKSpriteNode()
 import SpriteKit
 import GameplayKit
  
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         // this stuff happens once (when the app opens)
         createBackground()
@@ -19,8 +20,12 @@ class GameScene: SKScene {
                makeBall()
             makePaddle()
             makeBrick()
+            makeLoseZone()
+            
+           
+
            }
-        
+        kickBall()
         resetGame()
     }
     func createBackground() {
@@ -82,4 +87,17 @@ class GameScene: SKScene {
            brick.physicsBody?.isDynamic = false
            addChild(brick)
        }
+    
+    func makeLoseZone() {
+        loseZone = SKSpriteNode(color: .red, size: CGSize(width: frame.width, height: 50))
+        loseZone.position = CGPoint(x: frame.midX, y: frame.minY + 25)
+        loseZone.name = "loseZone"
+        loseZone.physicsBody = SKPhysicsBody(rectangleOf: loseZone.size)
+        loseZone.physicsBody?.isDynamic = false
+        addChild(loseZone)
+    }
+    func kickBall() {
+         ball.physicsBody?.isDynamic = true
+         ball.physicsBody?.applyImpulse(CGVector(dx: 3, dy: 5))
+     }
 }
